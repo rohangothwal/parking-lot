@@ -8,6 +8,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import com.parkinglot.config.AppConfig;
 
 //java -Dlog4j.configuration=log4j.xml -Xms1g -Xmx4g -jar parking-lot-jar-with-dependencies.jar
+//java -Xms1g -Xmx4g -jar parking-lot-jar-with-dependencies.jar
 public class Main {
 	
 	private static Logger	log	= (Logger) LoggerFactory.getLogger(Main.class);
