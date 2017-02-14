@@ -5,7 +5,7 @@ import java.util.List;
 import com.parkinglot.model.Car;
 import com.parkinglot.model.Ticket;
 
-public interface ParkingLot {
+public interface ParkingLotService {
 	public Ticket park(final Car car);
 	public boolean leaveParking(Ticket ticket);
 	public List<Ticket> status();
