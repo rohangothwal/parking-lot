@@ -2,19 +2,12 @@ package com.parkinglot.model.test;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import com.parkinglot.config.AppConfig;
 import com.parkinglot.model.Car;
 import com.parkinglot.model.ParkingLot;
 
 import static org.junit.Assert.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=AppConfig.class,loader=AnnotationConfigContextLoader.class)
 public class ParkingLotTest {
 	
 	private ParkingLot parkinglot;

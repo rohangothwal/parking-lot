@@ -1,33 +1,23 @@
 package com.parkinglot.service.test;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-import com.parkinglot.config.AppConfig;
 import com.parkinglot.model.Car;
+import com.parkinglot.model.ParkingLot;
 import com.parkinglot.model.Ticket;
 import com.parkinglot.service.TicketingService;
+import com.parkinglot.service.impl.TicketingServiceImpl;
 
 import static org.junit.Assert.*;
 
 //@Ignore
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes=AppConfig.class,loader=AnnotationConfigContextLoader.class)
 public class ParkingLotServiceTest {
 
 	private static Logger	log	= (Logger) LoggerFactory.getLogger(ParkingLotServiceTest.class);
 	private TicketingService service;
-	@Autowired
-	private ApplicationContext context;
 	
 	private Car car1 = new Car("KA-01-HH-1234","White");
 	private Car car2 = new Car("KA-01-HH-9999","White");
@@ -41,7 +31,8 @@ public class ParkingLotServiceTest {
 	@Before
 	public void init(){
 		int parkingCapacity = 6;
-		service = (TicketingService) context.getBean("ticketingService",parkingCapacity);
+		ParkingLot parkingLot = new ParkingLot(parkingCapacity);
+		service = new TicketingServiceImpl(parkingLot);
 	}
 	
 	@Test

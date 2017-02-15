@@ -8,18 +8,16 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
+import com.parkinglot.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import com.parkinglot.config.AppConfig;
 import com.parkinglot.constants.Constants;
 import com.parkinglot.constants.ParkingInstructions;
 import com.parkinglot.model.Car;
+import com.parkinglot.model.ParkingLot;
 import com.parkinglot.model.Ticket;
 import com.parkinglot.service.TicketingService;
+import com.parkinglot.service.impl.TicketingServiceImpl;
 
 //java -Dlog4j.configuration=log4j.xml -Xms1g -Xmx4g -jar parking-lot-jar-with-dependencies.jar
 //java -Xms1g -Xmx4g -jar parking-lot-jar-with-dependencies.jar
@@ -43,8 +41,8 @@ public class Main {
 	}
 
 	private static void initializeSystem(int parkingCapacity){
-		ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		service = (TicketingService) context.getBean("ticketingService",parkingCapacity);
+		ParkingLot parkingLot = new ParkingLot(parkingCapacity);
+		service = new TicketingServiceImpl(parkingLot);
 	}
 
 	private static String processInstructions(String[] instructionSet) {
@@ -82,7 +80,7 @@ public class Main {
 				if (list == null) {
 					return Constants.NOT_FOUND;
 				} else {
-					return StringUtils.join(list, ",");
+					return StringUtils.join(list.iterator(), ",");
 				}
 			}
 			case SLOT_NUMBER_FOR_COLOUR: {
@@ -91,7 +89,7 @@ public class Main {
 				if (list == null) {
 					return Constants.NOT_FOUND;
 				} else {
-					return StringUtils.join(list, ",");
+					return StringUtils.join(list.iterator(), ",");
 				}
 			}
 			case SLOT_NUMBER_FOR_REG_NUMBER: {
@@ -104,7 +102,7 @@ public class Main {
 			}
 			case STATUS: {
 				List<Ticket> tickets = service.status();
-				return Constants.STATUS_HEADER + StringUtils.join(tickets, "\n");
+				return Constants.STATUS_HEADER + StringUtils.join(tickets.iterator(), "\n");
 			}
 			}
 		} catch(Exception e) {
