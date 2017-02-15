@@ -62,7 +62,7 @@ public class TicketingServiceImpl implements TicketingService {
 
 	@Override
 	public int getSlotForNumber(String registrationNumber) {
-		return parkingLot.getSlotForRegistrationNumber(registrationNumber);
+		return parkingLot.getSlotForRegistrationNumber(registrationNumber)+1;
 	}
 
 	@Override

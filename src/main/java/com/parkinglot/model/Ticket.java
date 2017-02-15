@@ -19,7 +19,7 @@ public class Ticket {
 	}
 	@Override
 	public String toString() {
-		return "Ticket [car=" + car + ", parkingSlot=" + parkingSlot + "]";
+		return parkingSlot + "\t" + car.getRegistrationNumber() + "\t" + car.getColour();
 	}
 	@Override
 	public int hashCode() {

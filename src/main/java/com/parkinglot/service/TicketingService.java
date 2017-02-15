@@ -37,7 +37,7 @@ public interface TicketingService {
 	/**
 	 * 
 	 * @param registrationNumber
-	 * @return Slot for given registration number, -1 if not present
+	 * @return Slot for given registration number, 0 if not present
 	 */
 	public int getSlotForNumber(String registrationNumber);
 	
