@@ -6,12 +6,18 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
+
+import com.parkinglot.model.ParkingLot;
+import com.parkinglot.service.TicketingService;
+import com.parkinglot.service.impl.TicketingServiceImpl;
 
 @Configuration
 @PropertySource({"app.properties"})
@@ -24,6 +30,14 @@ public class AppConfig {
 	@Bean
 	public static PropertySourcesPlaceholderConfigurer propertyConfigIn() {
 		return new PropertySourcesPlaceholderConfigurer();
+	}
+	
+	@Bean
+	@Lazy(value = true)
+	public TicketingService ticketingService(Integer size) {
+		ParkingLot parkingLot = new ParkingLot(size);
+		TicketingService service = new TicketingServiceImpl(parkingLot);
+		return service;
 	}
 	
 	@Bean

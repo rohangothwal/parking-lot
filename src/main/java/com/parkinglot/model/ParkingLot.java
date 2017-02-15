@@ -1,10 +1,9 @@
 package com.parkinglot.model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -15,35 +14,34 @@ public class ParkingLot {
 	private static Logger	log	= (Logger) LoggerFactory.getLogger(ParkingLot.class); 
 	
 	private Car[] slots;
-	private int firstUnOccupiedSlot;
 	private Map<String, Set<Integer>> colourIndex;
 	private Map<String, Integer> registrationNumberIndex;
+	private PriorityQueue<Integer> emptySlots;
 	
 	public ParkingLot(int size) {
 		slots = new Car[size];
 		colourIndex = new HashMap<>();
 		registrationNumberIndex = new HashMap<>();
+		emptySlots = new PriorityQueue<>();
+		for (int i=0;i<size;i++) {
+			emptySlots.add(i);
+		}
 	}
 	
+	/**
+	 * Assigns next slot nearest to parking entrance
+	 * @param car
+	 * @return slot assigned or -1 if no slot is available
+	 */
 	public int assignNextSlot(Car car) {
-		if (firstUnOccupiedSlot==slots.length) {
+		Integer firstUnOccupiedSlot = emptySlots.poll();
+		if (firstUnOccupiedSlot==null) {
 			return -1;
 		}
-		int slotAssigned = firstUnOccupiedSlot;
-		slots[firstUnOccupiedSlot++] = car;
+		slots[firstUnOccupiedSlot] = car;
+		addIndexes(firstUnOccupiedSlot, car);
 		
-		addIndexes(slotAssigned, car);
-		
-		for (int i=firstUnOccupiedSlot;i<slots.length;i++) {
-			if (slots[i] == null) {
-				firstUnOccupiedSlot = i;
-				log.trace("Slot assigned : "+slotAssigned);
-				return slotAssigned;
-			}
-		}
-		firstUnOccupiedSlot = slots.length;
-		log.trace("Slot assigned : "+slotAssigned);
-		return slotAssigned;
+		return firstUnOccupiedSlot;
 	}
 	
 	private void addIndexes(int slotAssigned, Car car) {
@@ -60,6 +58,11 @@ public class ParkingLot {
 		
 	}
 
+	/**
+	 * Clears the given slot
+	 * @param slot
+	 * @return Car parked on given slot, null if no car is parked or slot number is invalid
+	 */
 	public Car clearSlot(int slot) {
 		
 		if (slot>=slots.length || slots[slot] == null) {
@@ -67,13 +70,8 @@ public class ParkingLot {
 		}
 		Car car = slots[slot];
 		slots[slot] = null;
-		log.trace("Removing car : "+car);
 		removeIndexes(slot, car);
-		
-		if (firstUnOccupiedSlot > slot) {
-			firstUnOccupiedSlot = slot;
-		}
-		log.trace("UnOccupied Slot assigned : "+firstUnOccupiedSlot);
+		emptySlots.add(slot);
 		return car;
 	}
 	
@@ -82,6 +80,11 @@ public class ParkingLot {
 		registrationNumberIndex.remove(car.getRegistrationNumber().toLowerCase());
 	}
 
+	/**
+	 * Returns slot number for the car with registration number
+	 * @param registrationNumber
+	 * @return slot or -1 in case of invalid registration number or car not found
+	 */
 	public int getSlotForRegistrationNumber(String registrationNumber) {
 		if (registrationNumber != null && registrationNumberIndex.containsKey(registrationNumber.trim().toLowerCase())) {
 			return registrationNumberIndex.get(registrationNumber.trim().toLowerCase());
@@ -90,6 +93,11 @@ public class ParkingLot {
 		}
 	}
 	
+	/**
+	 * Returns slots for car with given colour, Slot numbers start from 0
+	 * @param colour
+	 * @return Set of slots or null in case of invalied colour
+	 */
 	public Set<Integer> getSlotsForColour(String colour) {
 		if (colour != null) {
 			return colourIndex.get(colour.trim().toLowerCase());
@@ -98,15 +106,20 @@ public class ParkingLot {
 		}
 	}
 	
+	/**
+	 * Returns car parked on given slot, starting from 0
+	 * @param slot
+	 * @return Car parked on given slot or null if no car is parked
+	 */
 	public Car getCarOnSlot(int slot) {
 		return slots[slot];
 	}
 	
-	public List<Car> getAllCarsParked() {
-		List<Car> cars = new ArrayList<>();
-		for (Integer i : registrationNumberIndex.values()) {
-			cars.add(slots[i]);
-		}
-		return cars;
+	/**
+	 * 
+	 * @return Status of all slots in parking lot
+	 */
+	public Car[] getAllCarsParked() {
+		return slots;
 	}
 }

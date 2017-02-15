@@ -59,7 +59,8 @@ public class ParkingLotTest {
 		
 		//checking count of cars parked
 		assertEquals(car4, parkinglot.clearSlot(1));
-		assertEquals(4,parkinglot.getAllCarsParked().size());
+		assertEquals(6,parkinglot.getAllCarsParked().length);
+		assertTrue(parkinglot.getAllCarsParked()[0].equals(car1));
 		
 		//checking index for registration number
 		assertEquals(0,parkinglot.getSlotForRegistrationNumber(car1.getRegistrationNumber()));

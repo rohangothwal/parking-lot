@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.parkinglot.config.AppConfig;
+import com.parkinglot.service.TicketingService;
 
 //java -Dlog4j.configuration=log4j.xml -Xms1g -Xmx4g -jar parking-lot-jar-with-dependencies.jar
 //java -Xms1g -Xmx4g -jar parking-lot-jar-with-dependencies.jar
@@ -15,10 +16,8 @@ public class Main {
 
 	public static void main(String[] args) {
 		 ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		 log.info("Context Initialized");
+		 int parkingCapacity =6 ;
+		 TicketingService service = (TicketingService) context.getBean("ticketingService",parkingCapacity);
 	}
 
-	private static void createParkingLot(Integer numberOfSlots) {
-		
-	}
 }
