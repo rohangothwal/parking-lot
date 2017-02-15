@@ -2,8 +2,6 @@ package com.parkinglot.utils;
 
 import java.util.Iterator;
 
-import org.apache.commons.lang3.ObjectUtils;
-
 public class StringUtils {
 	public static String join(Iterator<?> iterator, String separator) {
 		if (iterator == null) {
@@ -14,7 +12,7 @@ public class StringUtils {
 		}
 		Object first = iterator.next();
 		if (!(iterator.hasNext())) {
-			return ObjectUtils.toString(first);
+			return ((first == null) ? "" : first.toString());
 		}
 
 		StringBuilder buf = new StringBuilder(256);
